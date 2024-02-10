@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "mac-notification-forwarder"
+version = "0.1.0"
+description = "A flexible python application to forward Mac OS Notifications to Other Platforms"
+authors = ["Sean Han <hanxiaobow@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
