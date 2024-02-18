@@ -10,10 +10,9 @@ from mnf.notification import Notification
 
 from mnf.notification_forwarder import (
     BaseNotificationForwarder,
-    SlackNotificationForwarder,
 )
 
-logging.basicConfig(level=logging.DEBUG)
+
 logger = logging.getLogger(__name__)
 
 
@@ -83,15 +82,3 @@ class MacNotificationMonitor(BaseNotifcationMonitor):
             body=data["req"]["body"],
         )
         return notification
-
-
-def main():
-    s = sched.scheduler(time.monotonic, time.sleep)
-    slack_forwarder = SlackNotificationForwarder()
-    monitor = MacNotificationMonitor(notification_forwarders=[slack_forwarder])
-    s.enter(0, 1, monitor.check_system_notifications, (s,))
-    s.run()
-
-
-if __name__ == "__main__":
-    main()
