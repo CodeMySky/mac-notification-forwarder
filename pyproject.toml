@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mac-notification-forwarder"
+name = "mnf"
 version = "0.1.0"
 description = "A flexible python application to forward Mac OS Notifications to Other Platforms"
 authors = ["Sean Han <hanxiaobow@gmail.com>"]
@@ -8,6 +8,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+slack-sdk = "^3.27.0"
+python-dotenv = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
