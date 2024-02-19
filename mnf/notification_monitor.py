@@ -5,7 +5,7 @@ import sched, time
 import sqlite3
 import subprocess
 import logging
-from typing import List
+from typing import Any, Dict, List
 from mnf.notificaiton_router import NotificationRouter
 from mnf.notification import Notification
 
@@ -69,10 +69,10 @@ class MacNotificationMonitor(BaseNotifcationMonitor):
         return record[0]
 
     def parse_notification_data(self, raw_plist) -> Notification:
-        data = plistlib.loads(raw_plist)
+        data: Dict[str, Any] = plistlib.loads(raw_plist)
         notification = Notification(
             app_id=data["app"],
-            title=data["req"]["titl"],
-            body=data["req"]["body"],
+            title=data.get("req", {}).get("titl", ""),
+            body=data.get("req", {}).get("body", ""),
         )
         return notification
