@@ -6,22 +6,15 @@ import sqlite3
 import subprocess
 import logging
 from typing import List
+from mnf.notificaiton_router import NotificationRouter
 from mnf.notification import Notification
 
-from mnf.notification_forwarder import (
-    BaseNotificationForwarder,
-    SlackNotificationForwarder,
-)
-
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
 class BaseNotifcationMonitor:
-    def __init__(
-        self, notification_forwarders: List[BaseNotificationForwarder]
-    ) -> None:
-        self.notification_forwarders = notification_forwarders
+    def __init__(self, notification_router: NotificationRouter) -> None:
+        self.notification_router = notification_router
 
     @abstractmethod
     def check_system_notifications(self, scheduler: sched.scheduler = None):
@@ -31,8 +24,7 @@ class BaseNotifcationMonitor:
 
         notifications = self._check_system_notifications()
         for notification in notifications:
-            for notification_forwarder in self.notification_forwarders:
-                notification_forwarder.send_notification(notification)
+            self.notification_router.route(notification)
 
     def _check_system_notifications(self) -> List[Notification]:
         return []
@@ -40,8 +32,8 @@ class BaseNotifcationMonitor:
 
 class MacNotificationMonitor(BaseNotifcationMonitor):
     # Mac notification table contains rec_id: INTEGER, app_id: INTEGER, uuid: BLOB, data: BLOB, request_date: REAL, request_last_date: REAL, delivered_date: REAL, presented:Bool, style: INTEGER, snooze_fire_date: REAL
-    def __init__(self, notification_forwarders: List[BaseNotificationForwarder]):
-        super().__init__(notification_forwarders=notification_forwarders)
+    def __init__(self, notification_router: NotificationRouter):
+        super().__init__(notification_router=notification_router)
         sys_tmp_path = (
             subprocess.run(["getconf", "DARWIN_USER_DIR"], stdout=subprocess.PIPE)
             .stdout.decode("utf-8")
@@ -83,15 +75,3 @@ class MacNotificationMonitor(BaseNotifcationMonitor):
             body=data["req"]["body"],
         )
         return notification
-
-
-def main():
-    s = sched.scheduler(time.monotonic, time.sleep)
-    slack_forwarder = SlackNotificationForwarder()
-    monitor = MacNotificationMonitor(notification_forwarders=[slack_forwarder])
-    s.enter(0, 1, monitor.check_system_notifications, (s,))
-    s.run()
-
-
-if __name__ == "__main__":
-    main()

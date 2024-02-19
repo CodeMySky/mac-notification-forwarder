@@ -1,0 +1,7 @@
+forwarders:
+  slack:
+    channel: "C04HHD8RW6M"
+router:
+  default:
+    forwarder:
+      - slack
