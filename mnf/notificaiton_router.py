@@ -51,13 +51,11 @@ class NotificationRouter:
         if self.config["router"]["locked_only"] and not self.sys_is_locked():
             should_send = False
             logger.info(
-                f"Skipping notification {notification} because system is not locked and lock_only is set to true"
+                f"Skipping {notification} because system is not locked and lock_only is set to true"
             )
         elif notification.app_id in self.config["router"]["block_list"]:
             should_send = False
-            logger.info(
-                f"Skipping notification {notification} because it is in the block list"
-            )
+            logger.info(f"Skipping {notification} because it is in the block list")
         return should_send
 
     def sys_is_locked(self) -> bool:
