@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 class BaseNotifcationMonitor:
     def __init__(self, notification_router: NotificationRouter) -> None:
         self.notification_router = notification_router
+        logger.info("Monitor started")
 
     @abstractmethod
     def check_system_notifications(self, scheduler: sched.scheduler = None):
@@ -43,7 +44,7 @@ class MacNotificationMonitor(BaseNotifcationMonitor):
             sys_tmp_path, "com.apple.notificationcenter", "db2", "db"
         )
         if not os.path.exists(db_path):
-            logger.debug(f"Notification database not found at {db_path}")
+            logger.warn(f"Notification database not found at {db_path}")
         connection = sqlite3.connect(db_path)
         self.cursor = connection.cursor()
         self.last_system_notification_time = self.check_last_system_notification_time()

@@ -2,6 +2,7 @@ forwarders:
   slack:
     channel: "C04HHD8RW6M"
 router:
-  default:
-    forwarder:
-      - slack
+  # Only send message when system is locked
+  locked_only: true
+  block_list:
+    - "com.apple.MobileSMS"
