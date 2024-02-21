@@ -76,3 +76,11 @@ class MacNotificationMonitor(BaseNotifcationMonitor):
             body=data.get("req", {}).get("body", ""),
         )
         return notification
+
+    monitor = None
+
+    @classmethod
+    def get_monitor(cls):
+        if cls.monitor is None:
+            cls.monitor = MacNotificationMonitor(NotificationRouter())
+        return cls.monitor
