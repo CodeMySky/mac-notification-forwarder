@@ -16,8 +16,6 @@ class NotificationRouter:
 
         self.config_path = config_path
         self._load_config()
-        # Initialize cg session
-        self.cg_session = Quartz.CGSessionCopyCurrentDictionary()
 
     def _load_config(self):
         with open(self.config_path, "r") as f:
@@ -59,4 +57,6 @@ class NotificationRouter:
         return should_send
 
     def sys_is_locked(self) -> bool:
-        return "CGSSessionScreenIsLocked" in self.cg_session.keys()
+        # Initialize cg session
+        cg_session = Quartz.CGSessionCopyCurrentDictionary()
+        return "CGSSessionScreenIsLocked" in cg_session.keys()
