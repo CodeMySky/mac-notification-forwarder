@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class NotificationRouter:
 
-    def __init__(self, config_path: str) -> None:
+    def __init__(self, config_path: str = "config.yaml") -> None:
 
         self.config_path = config_path
         self._load_config()
