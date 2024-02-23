@@ -56,7 +56,9 @@ class MacNotificationMonitor(BaseNotifcationMonitor):
         notifications = []
         for record in records:
             data, delivered_date = record
-            self.last_system_notification_time = delivered_date
+            self.last_system_notification_time = max(
+                self.last_system_notification_time, delivered_date
+            )
             notification = self.parse_notification_data(data)
             notifications.append(notification)
         return notifications
