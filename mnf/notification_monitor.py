@@ -72,10 +72,15 @@ class MacNotificationMonitor(BaseNotifcationMonitor):
 
     def parse_notification_data(self, raw_plist) -> Notification:
         data: Dict[str, Any] = plistlib.loads(raw_plist)
+        app_id = data["app"].lower()
+        title = data.get("req", {}).get("titl", "")
+        body = data.get("req", {}).get("body", "")
+        if "chrome" in app_id:
+            app_id = title
         notification = Notification(
-            app_id=data["app"],
-            title=data.get("req", {}).get("titl", ""),
-            body=data.get("req", {}).get("body", ""),
+            app_id=app_id,
+            title=title,
+            body=body,
         )
         return notification
 
