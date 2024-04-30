@@ -45,7 +45,7 @@ class SlackNotificationForwarder(BaseNotificationForwarder):
                 res = self.client.conversations_create(name=name)
                 self.channel_to_id_map[name] = res["channel"]["id"]
                 slack_user = os.environ.get("SLACK_USER_ID")
-                if slack_user is not None and slack_user != '':
+                if slack_user is not None and slack_user != "":
                     self.client.conversations_invite(
                         channel=res["channel"]["id"], users=slack_user
                     )
